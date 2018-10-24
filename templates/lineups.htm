@@ -1,0 +1,21 @@
+{% extends "search_template.htm" %}
+
+{% block title %}
+VOWR Playlist Editor
+{% endblock %}
+
+
+{% block body %}
+        <h1 class="sect-header">My Lineups</h1>
+        <form class="form-search" action="{{ url_for('lineupEdit') }}" method="POST">
+            <select required onchange="checkNewPlaylist()" class="short" name="playlist" id="playlist">
+                <option selected disabled value="">Choose a playlist</option>
+{% for playlistId in params['existingPlaylists'] %}
+                <option value="{{ playlistId }}">{{ params['existingPlaylists'][playlistId] }}</option>
+{% endfor %}
+                <option value="create_new">Create new...</option>
+            </select>
+            <div class="inline" name="new_playlist_field"></div>
+            <button id="playlist_button" class="btn btn-large btn-primary thin" type="submit">Edit</button>
+        </form>
+{% endblock %}

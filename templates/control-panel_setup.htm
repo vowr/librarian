@@ -1,0 +1,26 @@
+{% extends "control-panel_template.htm" %}
+
+{% block title %}
+Digital Catalogue Setup
+{% endblock %}
+
+{% block content %}
+
+        <h1 class="sect-header">Database Setup</h1>
+
+        <div class="floatbox">
+{% if params['setupErr'] == None %}
+                <h4>Way to go!</h4>
+                
+                <p>It looks like your database is all set up.</p>
+{% else %}
+                <h4>Fix me!</h4>
+                
+                <p>It looks like your database is needs a little setup.</p>
+
+                <p>We tried to create the necessary tables but MySQL is being particularly difficult to get along with today. The error we got is printed below.</p>
+
+                <pre>{{ params['setupErr'] }}</pre>
+{% endif %}
+        </div>
+{% endblock %}

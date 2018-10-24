@@ -1,0 +1,73 @@
+.form-signin {
+    max-width: 50%;
+    padding: 19px 29px 29px;
+    margin: 20vh auto 1pc auto;
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+       -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+            box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+    margin-bottom: 10px;
+}
+
+.forgot {
+    color: black;
+    font-weight: 500;
+}
+
+.error {
+    color: red;
+    font-weight: 600;
+}
+
+  .toggle-btns {
+    margin: 0.5pc 0pt 1pc 0pt;
+}
+
+.form-signin input[type="text"],
+.form-signin input[type="password"] {
+  width: 100%;
+  font-size: 1pc;
+  height: auto;
+  display: block;
+  margin-bottom: 1pc;
+  padding: 0.5pc 0.5pc;
+}
+
+select {
+  width: 100%;
+  height: auto;
+  display: block;
+  padding: 0.5pc 0.5pc;
+  margin-bottom: 1pc;
+}
+
+.short {
+  width: 30%;
+}
+
+.form-signin label {
+  font-size: 1.25pc;
+}
+
+tr.disabled i.fa {
+  opacity: .5;
+}
+
+tr.disabled a {
+  color: rgba(51, 122, 183, .5)
+}
+
+.sec_q {
+  font-size: 1.25pc;
+  height: auto;
+  vertical-align: middle;
+  margin: 1pc 0pc ;
+}

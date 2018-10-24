@@ -1,0 +1,46 @@
+{% extends "search_template.htm" %}
+
+{% block title %}
+Modify VOWR Digital Catalogue
+{% endblock %}
+
+{% block body %}
+        <h1 class="sect-header">Instructions</h1>
+
+        <div class="floatbox">
+                <p>To modify an entry in the catalogue, first use the <em>Search</em> page to find the entry you wish to modify. Then, click the edit button on the righthand side of the row in question.</p>
+
+                <p>This will bring you back to the <em>Modify</em> page. The attributes of the entry you wish to modify will be populated in a form on this page. Make any changes and click the <em>Modify</em> button to commit these to the catalogue.</p>
+        
+                <p>To easily change entity properties to match existing albums or artists, the form will auto-complete with any existing entries. Moreover, to confirm the changes made are indeed correct, the data entered will not disappear after submission. This is normal behaviour. You may confirm that the entry was recieved by consulting the <em>Status</em> section that will appear at the bottom of the page. All changes will be listed here as they are committed to the catalogue.</p>        
+        </div>
+
+
+{% if 'entity' in params %}
+        <form class="form-modify">
+            <h2>Modify entity</h2>
+            <label for="song">Song</label><input type="text" class="auto input-block-level" name="song" value="{{ params['entity']['name'] }}" placeholder="Song">
+            <label for="artist">Artist</label><input type="text" class="auto input-block-level" name="artist" value="{{ params['entity']['artist_name'] }}" placeholder="Artist">
+            <label for="album">Album</label><input type="text" class="auto input-block-level" name="album" value="{{ params['entity']['album_code'] }}" placeholder="Album">
+            <label for="genre">Genre</label><input type="text" class="auto input-block-level" name="genre" value="{{ params['entity']['genre'] }}" placeholder="Genre">
+            <label for="canadian">Canadian Content</label><select class="short" name="canadian">
+                    <option disabled>Is Canadian</option>
+{% if params['entity']['canadian'] %}
+                    <option selected value="n">No</option>
+                    <option value="y">Yes</option>
+{% else %}
+                    <option value="n">No</option>
+                    <option selected value="y">Yes</option>
+{% endif %}
+            </select>
+            <input type="hidden" name="song_id" value="{{ params['entity']['song_id'] }}">
+            <button class="btn btn-large btn-primary thin" type="submit">Modify</button>
+        </form>
+
+        <h2 class="sect-header">Status</h2>
+
+        <div id="status">
+            No changes made.
+        </div>
+{% endif %}
+{% endblock %}

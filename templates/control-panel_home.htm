@@ -1,0 +1,22 @@
+{% extends "control-panel_template.htm" %}
+
+{% block title %}
+Digital Catalogue Admin
+{% endblock %}
+
+{% block content %}
+        <h1 class="sect-header">Master Account</h1>
+        <div class="floatbox">
+{% if current_user.is_master %}
+                <p>Your account is already a master account.</p>
+        
+                <p>To downgrade to a basic account you must <a href="mailto:me@jwfh.ca?subject=%5BVOWR%20Library%5D%20Master%20Account%20Downgrade&body=User%20{{ params['user'] }}%20wishes%20to%20downgrade%20to%20a%20basic%20account.">contact a system administrator</a>.</p>
+{% else %}
+               <p>To upgrade your account to a master account, <a href="{{ url_for('gatekeeperUpgrade') }}">click here</a>. A master account will allow you to add entries to the library, as well as modify or delete existing entries.</p>
+
+                <p>Please note that upgrading to a master account <b>will require you to sign in with a password</b> at each login.</p>
+{% endif %}
+        </div>
+
+
+{% endblock %}

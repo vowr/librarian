@@ -1,0 +1,32 @@
+{% extends "vowr_template.htm" %}
+
+{% block style %}
+<link rel="stylesheet" href="/static/style/admin.css">
+{% endblock %}
+
+{% block subnavbar %}
+{% if current_user.is_admin %}
+<div class="navbar">
+    <div class="navbar-inner">
+      <div class="container">
+        <ul class="nav">
+{% for subnavitem in params['subnavbar'] %}
+{% if request.path.startswith(params['subnavbar'][subnavitem]) %}
+            <li class="active"><a href="{{params['subnavbar'][subnavitem]}}">{{subnavitem}}</a></li>
+{% else %}
+            <li><a href="{{params['subnavbar'][subnavitem]}}">{{subnavitem}}</a></li>    
+{% endif %}
+{% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div><!-- /.navbar -->
+{% endif %}
+{% endblock %}
+
+
+{% block body %}
+  {% include 'includes/_messages.htm' %}
+  {% block content %}
+  {% endblock %}
+{% endblock %}

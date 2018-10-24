@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+{% block title %}
+{% endblock %}
+        </title>
+        <meta http-equiv="Content-Language" content="en-ca">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <!-- <link rel="stylesheet" href="/static/style/style1.css">      -->
+        <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/static/fontawesome/css/all.css">
+        <link rel="stylesheet" href="/static/style/jqueryui.css">
+        <link rel="stylesheet" href="/static/style/vowr.css">
+        <link rel="stylesheet" href="/static/style/bg.css">
+        <link rel="stylesheet" href="/static/style/menu.css">    
+{% block style %}
+{% endblock %}
+        <script type="text/javascript" src="/static/scripts/jquery-1.10.1.min.js"></script>
+        <script type="text/javascript" src="/static/scripts/jquery-ui.min.js"></script>	
+        <script type="text/javascript" src="/static/bootstrap/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="https://code.angularjs.org/1.7.3/angular.js"></script>
+        <script type="text/javascript" src="https://code.angularjs.org/1.7.3/angular-route.js"></script>
+        <script type="text/javascript" src="/static/fontawesome/js/all.js"></script>
+        <script type="text/javascript" src="/static/scripts/vowr.js"></script>
+        <!-- <script type="text/javascript" src="/static/scripts/custom.js"></script>
+        <script type="text/javascript" src="/static/scripts/jquery.mobile.menu.js"></script>
+        <script type="text/javascript" src="/static/scripts/header-animate.js"></script> -->
+        <script type="text/javascript" src="/static/scripts/modernizr.custom.js"></script>
+{% block scripts %}
+{% endblock %}
+        <link rel="apple-touch-icon-precomposed" sizes="57x57" href="/static/assets/apple-touch-icon-57x57.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/static/assets/apple-touch-icon-114x114.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/static/assets/apple-touch-icon-72x72.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/static/assets/apple-touch-icon-144x144.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="60x60" href="/static/assets/apple-touch-icon-60x60.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/static/assets/apple-touch-icon-120x120.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/static/assets/apple-touch-icon-76x76.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/static/assets/apple-touch-icon-152x152.png" />
+        <link rel="icon" type="image/png" href="/static/assets/favicon-196x196.png" sizes="196x196" />
+        <link rel="icon" type="image/png" href="/static/assets/favicon-96x96.png" sizes="96x96" />
+        <link rel="icon" type="image/png" href="/static/assets/favicon-32x32.png" sizes="32x32" />
+        <link rel="icon" type="image/png" href="/static/assets/favicon-16x16.png" sizes="16x16" />
+        <link rel="icon" type="image/png" href="/static/assets/favicon-128.png" sizes="128x128" />
+        <meta name="msapplication-TileColor" content="#FFFFFF" />
+        <meta name="msapplication-TileImage" content="/static/assets/mstile-144x144.png" />
+        <meta name="msapplication-square70x70logo" content="/static/assets/mstile-70x70.png" />
+        <meta name="msapplication-square150x150logo" content="/static/assets/mstile-150x150.png" />
+        <meta name="msapplication-wide310x150logo" content="/static/assets/mstile-310x150.png" />
+        <meta name="msapplication-square310x310logo" content="/static/assets/mstile-310x310.png" />
+    </head>
+    <body>
+{% include 'includes/_navbar.htm' %}
+{% from "includes/_formhelpers.htm" import render_field %}   
+        <div class="outer-content">
+{% block subnavbar %}
+{% endblock %}
+                <div class="inner-content">             
+{% block body %}
+{% endblock %}
+                </div>
+        </div>
+{% include 'includes/_footer.htm' %}
+    </body>
+</html>

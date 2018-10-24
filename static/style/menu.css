@@ -1,0 +1,185 @@
+/* ul.nav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+li.nav {
+    float: left;
+}
+
+li.nav a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 0.5pc 1.5pc;
+    text-decoration: none;
+}
+
+li.nav a:hover:not(.active) {
+    background-color: #111;
+}
+
+.active {
+    background-color: #018EEC;
+} */
+/*div.topnav {
+    display: block;
+    margin: 0pt;
+    width: 100%;
+    position: fixed;
+    overflow: hidden;
+    background-color: #333;
+}
+  
+.topnav a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 0.5pc 1.5pc;
+    text-decoration: none;
+}
+  
+.topnav a:hover {
+    background-color: #111;
+    color: white;
+}
+  
+.topnav a.active {
+    background-color: #018EEC;
+    color: white;
+}
+  
+.topnav a.active:hover {
+    background-color: #0E91E8;
+    color: white;
+}
+.topnav .search-container {
+    float: right;
+}
+  
+.topnav input[type=text] {
+    padding: 0.25pc;
+    margin-top: 0.25pc;
+    font-size: 1pc;
+    border: none;
+}
+  
+.topnav .search-container button {
+    float: right;
+    padding: 0.25pc 0.75pc;
+    margin-top: 0.25pc;
+    margin-right: 1pc;
+    background: #ddd;
+    font-size: 1pc;
+    border: none;
+    cursor: pointer;
+}
+  
+.topnav .search-container button:hover {
+    background: #ccc;
+}*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+* {box-sizing: border-box;}
+
+.topnav {
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 0.5pc 1.5pc;
+  text-decoration: none;
+  font-size: 1pc;
+}
+
+
+.topnav a:hover {
+  background-color: #111;
+  color: white;
+}
+
+.topnav a.active {
+    background-color: #018EEC;
+    color: white;
+}
+  
+.topnav a.active:hover {
+    background-color: #0077C5;
+    color: white;
+}
+
+.topnav .right {
+    float: right;
+ }
+ 
+.topnav .search-container {
+    float: right;
+}
+
+.topnav input[type=text] {
+  padding: 0.25pc;
+  margin-top: 0.25pc;
+  font-size: 1pc;
+  border: none;
+}
+
+.topnav .search-container button {
+  float: right;
+  padding: 0.25pc 0.5pc;
+  margin-top: 0.25pc;
+  margin-right: 1pc;
+  background: #ddd;
+  font-size: 1pc;
+  border: none;
+  cursor: pointer;
+}
+
+.topnav .search-container button:hover {
+  background: #ccc;
+}
+
+@media screen and (max-width: 600px) {
+  .topnav .search-container {
+    float: none;
+  }
+  .topnav a, .topnav input[type=text], .topnav .search-container button {
+    float: none;
+    display: block;
+    text-align: left;
+    width: 100%;
+    margin: 0;
+    padding: 14px;
+  }
+  .topnav input[type=text] {
+    border: 1px solid #ccc;  
+  }
+}

@@ -1,0 +1,42 @@
+{% extends "search_template.htm" %}
+
+{% block title %}
+Search VOWR Digital Catalogue
+{% endblock %}
+
+{% block subnavbar %}
+        <form class="form-search" method="POST">
+            <input type="text" class="auto input-block-level" name="song_title" placeholder="Song">
+            <input type="text" class="auto input-block-level" name="artist_name" placeholder="Artist">
+            <input type="text" class="auto input-block-level" name="album_num" placeholder="Album">
+            <input type="text" class="auto input-block-level" name="category" placeholder="Category">
+            <div class="padbox">
+                <label for="canadian">Canadian Content Only</label>
+                <input type="checkbox" class="input-block-level" name="canadian" id="canadian">
+                <label for="dedup">Don't Show Duplicates</label>
+                <input type="checkbox" class="input-block-level" name="dedup" id="dedup">
+            </div>
+            <button class="btn btn-large btn-primary thin" type="submit">Search</button>
+        </form>
+{% endblock %}
+        
+{% block body %}
+{% if params.get('searchResults') != None %}
+        Test
+{% else %}
+        <h1 class="sect-header">Instructions</h1>
+        <div class="floatbox">
+            <p>
+                This page is used to browse the VOWR Music Library. You may search by <em>Song Title</em>, <em>Artist Name</em>, <em>Library Album ID</em>, and/or <em>Category</em>. You may also filter search results for only Canadian content.
+            </p>
+
+            <p>
+                To return a list of <em>all</em> songs in the library, simply click the <em>Search</em> button without providing any search parameters. 
+            </p>
+
+            <p>
+                By default, results are sorted by <em>Artist Name</em>. If you prefer to sort by <em>Song Title</em>, <em>Library Album ID</em>, or <em>Category</em>, click the heading in question in the results pane and the results will be reordered.
+            </p>
+        </div>
+{% endif %}
+{% endblock %}
