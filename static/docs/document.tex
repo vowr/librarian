@@ -1,0 +1,315 @@
+\let\version1
+\documentclass{book}
+
+\usepackage{geometry, mathptmx, parskip, graphicx, caption, subcaption, multicol, enumitem, float, upquote, fancybox, ebgaramond, microtype, titlesec, verbatim, listings}
+
+\lstdefinestyle{macrocode}{
+	name=macrocode,
+	%	language=[LaTeX]TeX,
+	basicstyle=\fontsize{9}{9.2}\selectfont\ttfamily\SetTracking{encoding=*}{-75}\lsstyle,
+	columns=fullflexible,
+	numbers=left,
+	breakatwhitespace=true,
+	numberfirstline=1,
+	firstnumber=auto,
+	numberstyle=\scriptsize,
+	numbersep=5pt,
+	frame=single,
+	breaklines=true,
+	breakindent=12pt,
+	aboveskip=0.5 \baselineskip,
+	belowskip=0.5 \baselineskip,
+	firstnumber=last,
+	prebreak=\mbox{$\hookleftarrow$},
+}
+
+\lstnewenvironment{macrocode}[1][]{%
+	\lstset{
+		style=macrocode,
+		#1
+	}
+	%	\csname\@lst @SetFirstNumber\endcsname
+}{%
+	%	\csname \@lst @SaveFirstNumber\endcsname
+}
+
+
+\titleformat{\section}{\normalfont\scshape\LARGE}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalfont\scshape\Large}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalfont\scshape\large}{\thesubsection}{1em}{}
+
+\renewcommand{\,}{\kern0.2ex}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[colorlinks=true,
+linkcolor  = Aquamarine!75!black]{hyperref}
+
+\setcounter{secnumdepth}{0}
+
+\geometry{inner=29mm,outer=25mm,top=26mm,bottom=25mm,paperwidth=184mm,paperheight=244mm}
+
+\title{\scshape {\Huge VOWR}\\Digital Catalogue\\Documentation}
+\author{Jacob House}
+\date{Version \version\\\today}
+
+
+\begin{document}
+	\maketitle
+	
+	\section{Compatibility}
+	\subsection{Operating System}
+	The new Digital Catalogue application is written to run on Windows Server. Development was done using Windows Server 2012~R2. The same or later versions of the Windows Server platform should be used in production to ensure optimal results. Earlier versions are not tested.
+	
+	The application is written in Python~3, a cross-platform programming language. Hence portability to other operating systems may work, but is not supported.
+	
+	\subsection{Web Application Server}
+	The application was developed and tested using Microsoft's Internet Information Services (IIS) web server which is standard in Windows Server 2012~R2.
+	
+	The application is written in Python~3, a cross-platform programming language. Hence portability to other web servers may work, but is not supported.
+	
+	\subsection{SQL Database}
+	The web application should be used with a MySQL database. Other databases such as MariaDB or MongoDB may work with minimal changes to sources but these are not supported. Use with Microsoft SQL Server will require large source rewrites as the MySQL connector used is not compatible with SQL Server; a suitable substitute must be found.
+	
+	
+	\section{Installation}
+	\subsection{Operating System and Web Application Server}
+	Follow the standard installation procedure for the operating system. 
+	
+	Installation of IIS should include the following features in the Add Roles and Features wizard.
+	\begin{itemize}[label=$\to$]
+		\item Web Server (IIS)
+		\begin{itemize}[label=$\to$]
+			\item Web Server
+			\begin{itemize}[label=$\to$]
+				\item Common HTTP Features
+				\begin{itemize}[label=$\to$]
+					\item Default Document
+					\item Directory Browsing
+					\item HTTP Errors
+					\item Static Content
+				\end{itemize}
+				\item Health and Diagnostics
+				\begin{itemize}[label=$\to$]
+					\item HTTP Log{}ging
+				\end{itemize}
+				\item Performance
+				\begin{itemize}[label=$\to$]
+					\item Static Content Compression
+					\item Dynamic Content Compression
+				\end{itemize}
+				\item Security
+				\begin{itemize}[label=$\to$]
+					\item Request Filtering
+					\item Basic Authentication
+				\end{itemize}
+				\item Application Development
+				\begin{itemize}[label=$\to$]
+					\item CGI
+				\end{itemize}
+			\end{itemize}
+			\item Management Tools
+			\begin{itemize}[label=$\to$]
+				\item IIS Management Console
+			\end{itemize}
+		\end{itemize}
+	\end{itemize}
+
+	These roles and features may also be installed using PowerShell with the {\ttfamily Install-Win\-d\-owsFea\-t\-ure} cmdlet.
+	
+	\begin{verbatim}
+	PS> Install-WindowsFeature -Name Web-Default-Doc, Web-Dir-Browsing, `
+	     Web-Http-Errors, Web-Static-Content, Web-Http-Logging, `
+	     Web-Stat-Compression, Web-Dyn-Compression, Web-Filtering, `
+	     Web-Basic-Auth, Web-CGI, Web-Mgmt-Console 
+	\end{verbatim}
+	
+	Depending on your installation you may need to specify a source.
+	
+	Ensure that the operating system is configured to use Microsoft Update and to install updates automatically. Optionally schedule weekly restarts for Monday mornings (03:00 should be fine).
+	
+	\subsection{IIS Web Platform Installer}
+	To easily install IIS modules required for our installation, we require the Microsoft Web Platform Installer. 
+	
+	Open IIS Manager (\verb|InetMgr.exe| or \verb|iis.msc|). From the IIS Manager Start Page, click Web Platform Installer, located under Online Resources. This will bring you to the \href{https://www.microsoft.com/web/downloads/platform.aspx}{download page} for the Web Platform Installer.
+	
+	After installing Web Platform Installer, restart IIS Manager. Expand the server name tab on the left and in the main pane under Management, choose Web Platform Installer.
+	
+	Under Products, choose All. From the list, find URL Rewrite 2.1. Click Add and then Install. Accept the terms.
+	
+	\subsection{Python 3}
+	At the time of writing, Python~3.6 is the latest stable version. This is what was used for testing. 
+	
+	Python may be downloaded from \url{https://www.python.org}. 
+	
+	When installing Python, be sure to choose the advanced installation options and then pick {\em Install For All Users} as well as {\em Add Python to PATH}.
+	
+	Note the installation directory. Normally this is either
+	\begin{verbatim}
+	     C:\Python3X
+	\end{verbatim}
+	or 
+	\begin{verbatim}
+	     C:\Program Files\Python3X
+	\end{verbatim}
+	
+	\subsection{Python Modules}
+	Browse the file system to the Python installation directory. Note the executable name for Python. It may be \verb|python.exe|, \verb|python3.exe|, or, for version 3.6, \verb|python3.6.exe|.
+	
+	Open an administrative PowerShell instance. First we must update Pip, Python's package manager.
+	
+	\begin{verbatim}
+	PS> python -m pip install --upgrade pip
+	\end{verbatim}
+	
+	Now we can begin installing the required modules.
+	
+	\begin{verbatim}
+	PS> python -m pip install --ignore-installed flask
+	PS> python -m pip install --ignore-installed flask_login
+	PS> python -m pip install --ignore-installed flask_wtf
+	PS> python -m pip install --ignore-installed pymysql
+	PS> python -m pip install --ignore-installed wfastcgi
+	\end{verbatim}
+	
+	\subsection{Python FastCGI}
+	We installed {\sffamily wfastcgi} in the last section. Now we must configure the handler.
+
+	Browse the file system to the Python installation directory. There should be a folder called \verb|Scripts| that contains \verb|wfastcgi.py|. Copy this Python file to the web application root. In our case, this is \verb|C:\inetpub\wwwroot|.
+	
+	Open IIS Manager. Rename ``Default Web Site'' to ``VOWR Digital Cataloguer''. Click on the site in the left sidebar. From the main pane, double click Handler Mappings. From the Actions menu on the right, choose Add Module Mapping. Use the values in Table~\ref{tab:fastcgi}.
+
+	\begin{table}[ht!]
+		\centering
+		\fbox{\begin{tabular}{r@{:\quad}l}
+			Request Path & * \\
+			Module & FastCgiModule \\
+			Executable (optional) & C:\textbackslash Path\textbackslash To\textbackslash Python.exe$|$C:\textbackslash inetpub\textbackslash wwwroot\textbackslash wfastcgi.py \\
+			Name & FlaskHandler \\
+		\end{tabular}}
+		\caption{\label{tab:fastcgi}}
+	\end{table}
+	
+	Click Request Restrictions and make certain that the ``Invoke handler only if request is mapped to:'' checkbox is unchecked.
+
+	Click OK twice and then click Yes.
+	
+	Go to the root server in IIS Manager's lefthand display. Double click on FastCGI Settings in the main pane. There should be a single entry with our Python path and the WFastCGI script. Double click this entry. Under FastCGI Properties $>$ General, click the box to the right of ``Environment Variables'' that says ``(Collection)''. A button with an ellipsis should appear. Click this to open the entity attributes panel.
+	
+	We need to add two entries to this list. These are shown in Table~\ref{tab:fastcgi-props}.
+	
+	\begin{table}[ht!]
+		\centering
+		\fbox{\begin{tabular}{r@{:\quad}l}
+			Name & PYTHONPATH \\
+			Value & C:\textbackslash inetpub\textbackslash wwwroot \vspace{0.5pc} \\ 
+			Name & WSGI\textunderscore HANDLER \\
+			Value & vowr.app
+		\end{tabular}}
+		\caption{\label{tab:fastcgi-props}}
+	\end{table}
+
+
+	\subsection{MySQL}
+	At the time of writing, the latest version of MySQL is version 8.0.12.0. The Windows installer may be downloaded from \url{https://dev.mysql.com/get/Downloads/MySQLInstaller/mysql-installer-community-8.0.12.0.msi}.
+	
+	Follow the on-screen instructions to install MySQL. When choosing a setup type, select ``Server Only''. The other parts of the installation are useful for development however in the spirit of minimizing attack surface, we will not install them on the server.
+	
+	When you have installed MySQL and are configuring it, on the Type and Networking page, for Config Type, choose ``Server Computer''. This will allow MySQL to use a suitable amount of memory for our application (i.e., good performance while sharing resources with IIS).
+	
+	\begin{center}
+		\shadowbox{\parbox{0.95\linewidth}{{\scshape Note:} MySQL requires that the .NET Framework 4.5.2 be installed. If this is not already installed, it may be downloaded from \url{https://www.microsoft.com/en-us/download/details.aspx?id=42642}.}}
+	\end{center}
+
+	
+	\subsection{Clean Up}
+	Our installation is now complete.
+	
+	Copy the source code to C:\textbackslash inetpub\textbackslash wwwroot.
+	
+	Finally, we must ready the server for production. To do this, we remove the Desktop Experience server roles. In Server 2012 R2, we use the following PowerShell cmdlets.
+	
+	\begin{verbatim}
+	PS> Uninstall-WindowsFeature -Name Server-Gui-Shell, `
+	     Server-Gui-Mgmt-Infra
+	PS> Restart-Computer
+	\end{verbatim}
+	
+	\section{Overview}
+	
+	
+	\section{Implementation}
+	\subsection{Logic}
+	\subsubsection{vowr.py}
+	\lstinputlisting[style=macrocode]{../../vowr.py}
+	\subsubsection{auth\textunderscore manager.py}
+	\lstinputlisting[style=macrocode]{../../auth_manager.py}
+	\subsubsection{db\textunderscore manager.py}
+	\lstinputlisting[style=macrocode]{../../db_manager.py}
+	\subsubsection{music\textunderscore manager.py}
+	\lstinputlisting[style=macrocode]{../../music_manager.py}
+	\subsubsection{xmlconf.py}
+	\lstinputlisting[style=macrocode]{../../xmlconf.py}
+	\subsubsection{wfastcgi.py}
+	\lstinputlisting[style=macrocode]{../../wfastcgi.py}
+	
+	\subsection{HTML}
+	\subsubsection{templates/vowr\textunderscore template.htm}
+	\lstinputlisting[style=macrocode]{../../templates/vowr_template.htm}
+	\subsubsection{templates/default.htm}
+	\lstinputlisting[style=macrocode]{../../templates/default.htm}
+	\subsubsection{templates/search\textunderscore template.htm}
+	\lstinputlisting[style=macrocode]{../../templates/search_template.htm}
+	\subsubsection{templates/search.htm}
+	\lstinputlisting[style=macrocode]{../../templates/search.htm}
+	\subsubsection{templates/append.htm}
+	\lstinputlisting[style=macrocode]{../../templates/append.htm}
+	\subsubsection{templates/modify.htm}
+	\lstinputlisting[style=macrocode]{../../templates/modify.htm}
+	\subsubsection{templates/playlists.htm}
+	\lstinputlisting[style=macrocode]{../../templates/playlists.htm}
+	\subsubsection{templates/playlists\textunderscore edit.htm}
+	\lstinputlisting[style=macrocode]{../../templates/playlists_edit.htm}
+	\subsubsection{templates/admin\textunderscore template.htm}
+	\lstinputlisting[style=macrocode]{../../templates/admin_template.htm}
+	\subsubsection{templates/admin\textunderscore home.htm}
+	\lstinputlisting[style=macrocode]{../../templates/admin_home.htm}
+	\subsubsection{templates/admin\textunderscore users.htm}
+	\lstinputlisting[style=macrocode]{../../templates/admin_users.htm}
+	\subsubsection{templates/admin\textunderscore dbadmin.htm}
+	\lstinputlisting[style=macrocode]{../../templates/admin_dbadmin.htm}
+	\subsubsection{templates/admin\textunderscore setup.htm}
+	\lstinputlisting[style=macrocode]{../../templates/admin_setup.htm}
+	\subsubsection{templates/gatekeeper\textunderscore sign-in.htm}
+	\lstinputlisting[style=macrocode]{../../templates/gatekeeper_sign-in.htm}
+	\subsubsection{templates/gatekeeper\textunderscore sign-out.htm}
+	\lstinputlisting[style=macrocode]{../../templates/gatekeeper_sign-out.htm}
+	\subsubsection{templates/gatekeeper\textunderscore forgot.htm}
+	\lstinputlisting[style=macrocode]{../../templates/gatekeeper_forgot.htm}
+	
+	\subsection{Style Sheets}
+	\subsubsection{static/style/vowr.css}
+	\lstinputlisting[style=macrocode]{../../static/style/vowr.css}
+	
+	\subsubsection{static/style/admin.css}
+	\lstinputlisting[style=macrocode]{../../static/style/admin.css}
+	
+	\subsubsection{static/style/bg.css}
+	\lstinputlisting[style=macrocode]{../../static/style/bg.css}
+	
+	\subsubsection{static/style/gatekeeper.css}
+	\lstinputlisting[style=macrocode]{../../static/style/gatekeeper.css}
+	
+	\subsubsection{static/style/menu.css}
+	\lstinputlisting[style=macrocode]{../../static/style/menu.css}
+	
+	\subsubsection{static/style/search.css}
+	\lstinputlisting[style=macrocode]{../../static/style/search.css}
+	
+	
+	\subsection{JavaScript}
+	
+	
+	
+	
+	
+	
+\end{document}

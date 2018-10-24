@@ -1,0 +1,58 @@
+{% extends "search_template.htm" %}
+
+{% block title %}
+Add to VOWR Digital Catalogue
+{% endblock %}
+
+{% block body %}
+        <h1 class="sect-header">Instructions</h1>
+
+        <div class="floatbox">
+            <p>To add a song to the catalogue, complete the fields above and click <em>Append</em>.</p>
+
+            <p>To easily add songs to existing albums or by existing artists, the form will auto-complete with any existing entries. Moreover, to easily add multiple songs from the same album or, more generally, with any duplicate fields, the data entered will not disappear after submission. This is normal behaviour. You may confirm that the entry was recieved by consulting the <em>Status</em> section below. All changes will be listed here as they are committed to the catalogue.</p>    
+        </div>
+        
+        
+        <h1 class="sect-header">New entity</h1>
+        <form class="ajax-sub form-modify" method="POST">
+            <div class="form-group">
+                {{ render_field(params['append_form'].song_title, class_="auto input-block-level form-control") }}
+            </div>
+            <div class="form-group">
+                {{ render_field(params['append_form'].artist_name, class_="auto input-block-level form-control") }}
+            </div>
+            <div class="form-group">
+                {{ render_field(params['append_form'].album_num, class_="auto input-block-level form-control") }}
+            </div>
+            <div class="form-group">
+                {{ render_field(params['append_form'].media, class_="input-block-level form-control") }}
+            </div>
+            <div class="form-group">
+                {{ render_field(params['append_form'].category, class_="auto input-block-level form-control") }}
+            </div>
+            <div class="form-group">
+                {{ render_field(params['append_form'].side, class_="input-block-level form-control") }}
+            </div>
+            <div class="form-group">
+                {{ render_field(params['append_form'].track, class_="input-block-level form-control") }}
+            </div>
+            <div class="form-group">
+                {{ render_field(params['append_form'].performance_type, class_="input-block-level form-control") }}
+            </div>
+            <div class="form-group">
+                {{ render_field(params['append_form'].theme, class_="input-block-level form-control") }}
+            </div>
+            <div class="form-group">
+                {{ render_field(params['append_form'].canadian, class_="short input-block-level form-control") }}
+            </div>
+
+            <button class="btn btn-large btn-primary thin" type="submit">Append</button>
+        </form>
+
+        <h2 class="sect-header">Status</h2>
+
+        <div id="status">
+            <p>No changes made.</p>
+        </div>
+{% endblock %}

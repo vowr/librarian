@@ -1,0 +1,37 @@
+{% extends "control-panel_template.htm" %}
+
+{% block title %}
+Account Activity
+{% endblock %}
+
+{% block content %}
+    <h1 class="sect-header">Authentication Logs</h1>
+    <em><h4>for user {{ params['acct'] }}</h4></em>
+{% if params['num_logins'] > 0 %}
+        <div class="floatbox">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Remote IP</th>
+                </tr>
+                </thead>
+                <tbody>
+{% for log in params['logs'] %}
+                <tr>
+                    <td>{{ log['day'] }}</td>
+                    <td>{{ log['time'] }}</td>
+                    <td>{{ log['ip'] }}</td>
+                </tr>
+{% endfor %}            
+                </tbody>
+            </table>
+        </div>
+{% else %}
+        <div class="center">
+            This user has not logged in yet.
+        </div>
+{% endif %}
+
+{% endblock %}

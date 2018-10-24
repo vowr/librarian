@@ -1,0 +1,19 @@
+
+body {
+    position: relative;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url("/static/assets/bg.jpg");
+    height: 100%;
+}
+
+
+
+/* Turn off parallax scrolling for tablets and phones */
+@media only screen and (max-device-width: 1024px) {
+    .bgimg {
+        background-attachment: scroll;
+    }
+}

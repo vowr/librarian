@@ -1,0 +1,110 @@
+.form-search {
+    /* max-width: 80%; */
+    padding: 0.75pc;
+    margin: 0.75pc auto;
+    align-self: center;
+    align-content: center;
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+       -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+            box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+
+.form-search .form-search-heading,
+.form-search .checkbox {
+    margin-bottom: 10px;
+}
+
+.form-search input[type="text"],
+.form-search input[type="password"] {
+    width: 17%;
+    font-size: 16px;
+    height: auto;
+    margin-bottom: 15px;
+    padding: 0.5pc 0.5pc;
+    margin: 1%;
+}
+
+.padbox {
+    display: inline;
+    padding: 0.5pc 0.5pc;
+    margin: 1%;
+}
+
+.form-search input[type="checkbox"] {
+    width: 1pc;
+    height: 1pc;
+    vertical-align: middle;
+    margin-bottom: 5px;
+}
+
+.form-search label {
+    font-size: 16px;
+    height: auto;
+    vertical-align: middle;
+}
+
+
+
+.form-modify {
+    padding: 2pc;
+    margin: 2pc auto 1pc auto;
+    align-self: center;
+    align-content: center;
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+       -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+            box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+
+.form-modify .form-modify-heading,
+.form-modify .checkbox {
+    margin-bottom: 10px;
+}
+
+.form-modify input[type="text"],
+.form-modify input[type="password"] {
+    width: 100%;
+    font-size: 1pc;
+    height: auto;
+    display: block;
+    margin-bottom: 1pc;
+    padding: 0.5pc 0.5pc;
+}
+
+select {
+    width: 100%;
+    height: auto;
+    display: block;
+    padding: 0.5pc 0.5pc;
+    margin-bottom: 1pc;
+}
+
+.short {
+    width: 30%;
+}
+
+.form-modify label {
+    font-size: 1.25pc;
+}
+
+.vphantom p {
+    margin: 0pt;
+}
+
+.thin {
+    margin: 0pt 0.5pc;
+    padding: 0.5pc 1.25pc;
+}
+
+.vthin {
+    padding: 0.33pc 1.25pc;
+}

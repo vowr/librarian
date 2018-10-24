@@ -1,0 +1,83 @@
+/* Customize the navbar links to be fill the entire space of the .navbar */
+.navbar .navbar-inner {
+  padding: 0;
+}
+.navbar .nav {
+  margin: 0;
+  display: table;
+  width: 100%;
+}
+.navbar .nav li {
+  display: table-cell;
+  width: 1%;
+  float: none;
+}
+.navbar .nav li a {
+  font-weight: bold;
+  text-align: center;
+  border-left: 1px solid rgba(255,255,255,.75);
+  border-right: 1px solid rgba(0,0,0,.1);
+}
+.navbar .nav li:first-child a {
+  border-left: 0;
+  border-radius: 3px 0 0 3px;
+}
+.navbar .nav li:last-child a {
+  border-right: 0;
+  border-radius: 0 3px 3px 0;
+}
+
+.form-register {
+  /* max-width: 75%; */
+  padding: 2pc;
+  margin: 1pc auto 1pc auto;
+  align-self: center;
+  align-content: center;
+  background-color: #fff;
+  border: 1px solid #e5e5e5;
+  -webkit-border-radius: 5px;
+     -moz-border-radius: 5px;
+          border-radius: 5px;
+  -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+     -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+          box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+
+.form-register .form-register-heading,
+.form-register .checkbox {
+  margin-bottom: 10px;
+}
+
+.form-register input[type="text"],
+.form-register input[type="password"] {
+  width: 100%;
+  font-size: 1pc;
+  height: auto;
+  display: block;
+  margin-bottom: 1pc;
+  padding: 0.5pc 0.5pc;
+}
+
+select {
+  width: 100%;
+  height: auto;
+  display: block;
+  padding: 0.5pc 0.5pc;
+  margin-bottom: 1pc;
+}
+
+.short {
+  width: 30%;
+}
+
+.form-register label {
+  font-size: 1.25pc;
+}
+
+tr.disabled i.fa {
+  opacity: .5;
+}
+
+tr.disabled a {
+  color: rgba(51, 122, 183, .5)
+}

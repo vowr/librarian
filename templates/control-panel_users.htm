@@ -1,0 +1,65 @@
+{% extends "control-panel_template.htm" %}
+
+{% block title %}
+Digital Catalogue Users
+{% endblock %}
+
+{% block content %}
+        <h1 class="sect-header">Existing Users</h1>
+        <div class="floatbox">
+{% if params['num_users'] > 0 %}
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>User name</th>
+                    <th>Admin user</th>
+                    <th>Master</th>
+                    <th>Active</th>
+                    <th>Account locked</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+{% for user in params['users'] %}
+{% if user['active'] %}                        
+                <tr>
+{% else %}
+                <tr class="disabled">
+{% endif %}
+                    <td>{{ user['username'] }}</td>
+                    <td>{{ user['admin'] }}</td>
+                    <td>{{ user['master'] }}</td>
+                    <td>{{ user['active'] }}</td>
+                    <td>{{ user['locked'] }}</td>
+                    <td>
+                        <a class="usepost" style="padding-right: 6pt" href="{{ url_for('cpUserLogs', id=user['id']) }}" title="Account activity" usepost><i class="fa fa-fingerprint"></i></a>
+{% if not user['admin'] %}  
+                        <a class="usepost" style="padding-right: 6pt" href="{{ url_for('cpUserAdmin', id=user['id']) }}" title="Make account admin" usepost><i class="fa fa-user-shield"></i></a>
+{% else %}
+                        <a class="usepost" style="padding-right: 6pt" href="{{ url_for('cpUserAdmin', id=user['id']) }}" title="Make account basic" usepost><i class="fa fa-user-minus"></i></a>
+{% endif %}
+{% if not user['master'] %}  
+                        <a class="usepost" style="padding-right: 6pt" href="{{ url_for('cpUserMaster', id=user['id']) }}" title="Make account master" usepost><i class="fa fa-user-edit"></i></a>
+{% else %}
+                        <a class="usepost" style="padding-right: 6pt" href="{{ url_for('cpUserMaster', id=user['id']) }}" title="Make account basic" usepost><i class="fa fa-user-times"></i></a>
+{% endif %}
+{% if user['active'] %}                        
+                        <a class="usepost" style="padding-right: 6pt" href="{{ url_for('cpUserActive', id=user['id']) }}" title="Deactivate this account" usepost><i class="fa fa-ban"></i></a>
+{% else %}
+                        <a class="usepost" style="padding-right: 6pt" href="{{ url_for('cpUserActive', id=user['id']) }}" title="Activate this account" usepost><i class="fa fa-check-circle"></i></a>
+{% endif %}
+{% if user['locked'] %}                        
+                        <a class="usepost" style="padding-right: 6pt" href="{{ url_for('cpUserUnlock', id=user['id']) }}" title="Unlock account" usepost><i class="fa fa-unlock"></i></a>
+{% endif %}
+                    </td>
+                </tr>
+{% endfor %}            
+                </tbody>
+            </table>
+{% else %}
+        <div class="center">
+            No users exist in the database.
+        </div>
+{% endif %}
+        </div>
+{% endblock %}

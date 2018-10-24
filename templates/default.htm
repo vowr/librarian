@@ -1,0 +1,50 @@
+{% extends "vowr_template.htm" %}
+
+{% block title %}
+VOWR Digital Library
+{% endblock %}
+
+{% block body %}
+
+        {% include 'includes/_messages.htm' %}
+
+        <h1 class="sect-header">Welcome</h1>
+
+        <div class="floatbox">
+                <p>This website allows DJs to view and edit the VOWR Digital Library, and to create music playlists from the catalogue.</p>
+
+                {% if not current_user.is_authenticated %}
+                <p>To get detailed song information, perform modifications or to create playlists, you must be <a href="{{ url_for('gatekeeperSignInBasic') }}">signed in</a>.</p>
+                {% endif %}
+        
+         <!--       <h2 class="sect-header">Site Map</h2>
+                
+                <h3>Request Song</h3>
+                <p>Lorepm ipsum dolor sit amet.</p>
+        
+        {% if current_user.is_authenticated %}
+                <h3>Search</h3>
+                <p>Lorepm ipsum dolor sit amet.</p>
+                
+                <h3>Playlists</h3>
+                <p>Lorepm ipsum dolor sit amet.</p>
+                
+                <h3>Append</h3>
+                <p>Lorepm ipsum dolor sit amet.</p>
+                
+                <h3>Modify</h3>
+                <p>Lorepm ipsum dolor sit amet.</p>
+                
+                <h3>Admin</h3>
+                <p>Lorepm ipsum dolor sit amet.</p>
+        
+        {% if params['admin'] %}
+                <p>LOREM IPSUM DOLOR SIT AMET.</p>
+        {% endif %}
+        {% endif %}
+         -->
+        </div>
+
+        
+
+{% endblock %}

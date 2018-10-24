@@ -1,0 +1,21 @@
+{% extends "search_template.htm" %}
+
+{% block title %}
+VOWR Playlist Editor
+{% endblock %}
+
+
+{% block body %}
+        <h2 class="inline sect-header">Editing Playlist "{{ params['playlistName'] }}"</h2>
+        <form class="inline" action="/playlists" method="POST"><button class="btn btn-large btn-primary vthin right" onClick="history.go(0)" type="submit">Back</button></form>
+        
+    
+        <form class="form-search" action="/playlists/edit" method="POST">
+            <input type="text" class="auto input-block-level" name="song" placeholder="Song">
+            <input type="text" class="auto input-block-level" name="artist" placeholder="Artist">
+            <input type="text" class="auto input-block-level" name="album" placeholder="Album">
+            <input type="text" class="input-block-level" name="genre" placeholder="Genre">
+            <input type="hidden" name="playlist" value="{{ params['playlistId'] }}">
+            <button class="btn btn-large btn-primary thin" type="submit">Append</button>
+        </form>
+{% endblock %}

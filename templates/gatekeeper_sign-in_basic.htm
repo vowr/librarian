@@ -1,0 +1,25 @@
+{% extends "vowr_template.htm" %}
+
+{% block style %}
+<link rel="stylesheet" href="/static/style/gatekeeper.css">
+{% endblock %}
+
+
+{% block title %}
+Sign In
+{% endblock %}
+
+{% block body %}
+        <form class="form-signin" method="POST" action="">
+            <h2 class="form-signin-heading">Please sign in</h2>
+            <div id="login-type-btn" class="btn-group toggle-btns">
+                <a usepost href="#" class="btn active btn-primary">Basic Login</a>
+                <a usepost href="{{ url_for('gatekeeperSignInMaster') }}" class="btn btn-default">Master Login</a>
+            </div>
+            {% include 'includes/_messages.htm' %}
+            <div class="form-group">
+                {{ render_field(params['login_form'].username, class_="form-control") }}
+            </div>
+            <button class="btn btn-large btn-primary" type="submit">Sign in</button>
+        </form>
+{% endblock %}

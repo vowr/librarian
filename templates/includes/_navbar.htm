@@ -1,0 +1,32 @@
+        <div class="navbar-fixed-top topnav">
+{% for navitem in params['navbar'] %}
+{% if request.path.startswith(params['navbar'][navitem]) %}
+            <a class="active" href="{{params['navbar'][navitem]}}">{{navitem}}</a>
+{% else %}
+            <a href="{{params['navbar'][navitem]}}">{{navitem}}</a>
+{% endif %}
+{% endfor %}
+            <div class="right">
+{% if current_user.is_authenticated %}
+                <a href="{{ url_for('gatekeeperSignOut') }}">Hi, {{session['username']}}. Sign out.</a>
+{% else %}
+                <a href="{{ url_for('gatekeeperSignInBasic') }}">Sign in</a>
+                <a href="{{ url_for('gatekeeperRegister') }}">Register</a>                
+{% endif %}
+            </div>
+        </div>
+        
+         <!-- <nav class="z-nav"> <a href="#" onclick="toggleNavMenu();" class="z-nav__toggle"> <span class="menu-icon"></span> <span class="menu-text">navigation</span>
+                <div class="menu-head"></div> </a> <div class="navbar-fixed-top topnav z-nav-inner">
+                <ul class="right z-nav__list">
+                <li class="z-nav__item"> <a class="z-nav__link" href="/getting-started/">Tour</a> </li>
+                <li class="z-nav__item"> <a class="z-nav__link" href="/products/">Products</a> </li>
+                </ul>
+                <ul class="z-nav__list">
+                <li class="z-nav__item"> <a class="z-nav__link" href="/getting-started/">Tour</a> </li>
+                <li class="z-nav__item"> <a class="z-nav__link" href="/products/">Products</a> </li>
+                <li class="z-nav__item"> <a class="z-nav__link" href="/our-services/">Services</a> </li>
+                <li class="z-nav__item"> <a class="z-nav__link" href="/get-support/">Support</a> </li>
+                </ul>
+                </div>
+        </nav> -->
