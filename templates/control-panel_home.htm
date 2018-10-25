@@ -10,10 +10,17 @@ Digital Catalogue Admin
         <h1 class="sect-header">Master Account</h1>
         
         <div class="floatbox">
-{% if current_user.is_master %}
+{% if current_user.is_real_master %}
                 <p>Your account is already a master account.</p>
         
                 <p>To downgrade to a basic account you must <a href="mailto:me@jwfh.ca?subject=%5BVOWR%20Library%5D%20Master%20Account%20Downgrade&body=User%20{{ params['user'] }}%20wishes%20to%20downgrade%20to%20a%20basic%20account.">contact a system administrator</a>.</p>
+
+{% if not current_user.is_master %}
+           
+                <em><b>Where are the rest of the buttons?</b></em>
+                <p>Your account has been upgraded to a master account, however you have signed in using the basic account sign-in form. For security reasons, your effective permissions have been temporarily downgraded to the level of basic user. To fix this, sign out and sign back in using the master sign-in form.</p>
+
+{% endif %}
 {% else %}
                <p>To upgrade your account to a master account, <a href="{{ url_for('gatekeeperUpgrade') }}">click here</a>. A master account will allow you to add entries to the library, as well as modify or delete existing entries.</p>
 

@@ -34,7 +34,7 @@ login_manager.login_view = '/gatekeeper/sign-in' # This is dependent on the rout
 
 # General-use dictionary to pass things to the HTML processor
 params = dict()
-
+params['site_title'] = 'VOWR Music Librarian'
 
 # I want the index page to have a consistent URI so redirecting to that page
 @app.route('/')
@@ -452,17 +452,24 @@ def gatekeeperForgot():
         if flask.request.form.get('sec_a'):
             correct = auth_manager.verify(flask.request.form.get('sec_a'), sec_a)
             if correct:
+                if flask.request.form.get('password'):
+                    params['reset_form'] = auth_manager.PasswordResetForm(flask.request.form)
+                else:
+                    params['reset_form'] = auth_manager.PasswordResetForm()
                 params['reset_sec_a'] = flask.request.form.get('sec_a')
                 params['reset_form_part'] = 3
                 params['btn_name'] = 'Reset'
-                if flask.request.form.get('password'):
+                params['reset_form'] = auth_manager.PasswordResetForm(flask.request.form)
+                if params['reset_form'].password.data == params['reset_form'].confirm.data:
                     try:
-                        auth_manager.updatePassword(params['reset_username'], flask.request.form.get('password'))
+                        auth_manager.updatePassword(params['reset_username'], params['reset_form'].password.data)
                     except:
                         flask.flash('There was an error resetting your password. Try again later.', 'error')
                     else:
                         flask.flash('Your password has been reset. Please try signing in.', 'success')
                         return(flask.redirect(flask.url_for('gatekeeperSignInMaster')))
+                else:
+                    flask.flash('Passwords do not match', 'error')
             else:
                 flask.flash('Incorrect security answer', 'error')
     return(flask.render_template('gatekeeper_forgot.htm', params=params))
@@ -538,4 +545,4 @@ def add_header(r):
     return(r)
 
 if __name__ == "__main__":
-    app.run(host='10.57.140.53', debug=True)
+    app.run(host='0.0.0.0', debug=True)

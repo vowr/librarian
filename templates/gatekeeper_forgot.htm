@@ -20,17 +20,18 @@ Reset Password
             </div>
             {% elif params['reset_form_part'] == 2 %}
             <input type="hidden" name="username" id="username" value="{{ params['reset_username'] }}">
-            <div class="sec_q">Security Question: {{ params['sec_q'] }}</div>
+            <div class="sec_q">{{ params['sec_q'] }}</div>
             <div class="form-group">
-                <label for="sec_a">Security answer</label>
                 <input type="password" class="input-block-level" name="sec_a" id="sec_a" required placeholder="Security answer">
             </div>
             {% elif params['reset_form_part'] == 3 %}
             <input type="hidden" name="username" id="username" value="{{ params['reset_username'] }}">
             <input type="hidden" name="sec_a" id="sec_a" value="{{ params['reset_sec_a'] }}">
             <div class="form-group">
-                <label for="sec_a">New password</label>
-                <input type="password" class="input-block-level" name="password" id="password" required placeholder="New password">
+                {{ render_field(params['reset_form'].password, class_="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ render_field(params['reset_form'].confirm, class_="form-control") }}
             </div>
             {% endif %}
             <button class="btn btn-large btn-primary" type="submit">{{ params['btn_name'] }}</button>

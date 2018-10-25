@@ -58,6 +58,15 @@ class AccountUpgradeForm(wtforms.Form):
         wtforms.validators.Length(max=255)
     ])
 
+class PasswordResetForm(wtforms.Form):
+    password = wtforms.PasswordField('New password', render_kw={"placeholder": "New password"}, validators=[
+        wtforms.validators.DataRequired(), 
+        wtforms.validators.EqualTo('confirm', message='Passwords do not match')
+    ])
+    confirm = wtforms.PasswordField('Confirm password', render_kw={"placeholder": "Confirm password"}, validators=[
+        wtforms.validators.DataRequired()
+    ])
+
 
 class BasicLoginForm(wtforms.Form):
     username = wtforms.StringField('User name', render_kw={"placeholder": "User name"}, validators=[
@@ -77,12 +86,29 @@ class MasterLoginForm(wtforms.Form):
 class User(flask_login.UserMixin):
     __slots__ = [
         '_id',
-        '_master',
-        '_admin', 
         '_username',
         '_active',
-        '_lockout_count'
+        '_lockout_count',
+        '_permissions',
+        '_effective_permissions'
     ]
+    
+    class _UserPermisson:
+        __slots__ = [
+            '_master',
+            '_admin'
+        ]
+        def __init__(self):
+            self._master = None
+            self._admin = None
+
+        @property
+        def master(self):
+            return(self._master)
+
+        @property 
+        def admin(self):
+            return(self._admin)
 
     def __init__(self, username, plaintextPassword, is_authenticated=False, login_type='basic'):
         db = db_manager.DBQuery()
@@ -93,13 +119,15 @@ class User(flask_login.UserMixin):
         if userinfo['lockout_count'] > 9:
             raise AssertionError('Authentication failed. Your account is locked due to repeated invalid login attempts.')
 
+        self._permissions, self._effective_permissions = self._UserPermisson(), self._UserPermisson()
         if login_type == 'master':
             if not is_authenticated:
                 goodPasswd = passlib.hash.pbkdf2_sha512.verify(plaintextPassword, userinfo['passhash'])
                 if not goodPasswd:
                     db.incrementLockoutCount(username)
                     raise ValueError('Authentication failed. Incorrect password.')
-            self._master, self._admin = userinfo['master'], userinfo['admin']
+            self._effective_permissions._master = userinfo['master'] 
+            self._effective_permissions._admin = userinfo['admin']
         else:
             self._master, self._admin = False, False
         
@@ -109,6 +137,8 @@ class User(flask_login.UserMixin):
         self._username = userinfo['username']
         self._active = userinfo['active']
         self._lockout_count = userinfo['lockout_count']
+        self._permissions._master = userinfo['master']
+        self._permissions._admin = userinfo['admin']
 
     @property
     def is_authenticated(self):
@@ -124,11 +154,19 @@ class User(flask_login.UserMixin):
     
     @property 
     def is_master(self):
-        return(self._master)
+        return(self._effective_permissions.master)
 
     @property
     def is_admin(self):
-        return(self._admin)
+        return(self._effective_permissions.admin)
+        
+    @property
+    def is_real_master(self):
+        return(self._permissions.master)
+
+    @property
+    def is_real_admin(self):
+        return(self._permissions.admin)
 
     def get_id(self):
         return(self._id)
