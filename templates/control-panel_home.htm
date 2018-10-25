@@ -5,7 +5,10 @@ Digital Catalogue Admin
 {% endblock %}
 
 {% block content %}
+        {% include 'includes/_messages.htm' %}
+        
         <h1 class="sect-header">Master Account</h1>
+        
         <div class="floatbox">
 {% if current_user.is_master %}
                 <p>Your account is already a master account.</p>

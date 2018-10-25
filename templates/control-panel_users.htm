@@ -5,7 +5,10 @@ Digital Catalogue Users
 {% endblock %}
 
 {% block content %}
+        {% include 'includes/_messages.htm' %}
+
         <h1 class="sect-header">Existing Users</h1>
+        
         <div class="floatbox">
 {% if params['num_users'] > 0 %}
             <table class="table table-hover">

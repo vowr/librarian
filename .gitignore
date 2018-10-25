@@ -1,6 +1,9 @@
 # XML config files (often contain sensitive and site-specific information)
 *.conf
 
+# VS Code Workspace File
+*.code-workspace
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

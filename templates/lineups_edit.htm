@@ -6,7 +6,10 @@ VOWR Playlist Editor
 
 
 {% block body %}
+        {% include 'includes/_messages.htm' %}
+
         <h2 class="inline sect-header">Editing Playlist "{{ params['playlistName'] }}"</h2>
+        
         <form class="inline" action="/playlists" method="POST"><button class="btn btn-large btn-primary vthin right" onClick="history.go(0)" type="submit">Back</button></form>
         
     

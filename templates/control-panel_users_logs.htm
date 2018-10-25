@@ -5,7 +5,10 @@ Account Activity
 {% endblock %}
 
 {% block content %}
+    {% include 'includes/_messages.htm' %}
+    
     <h1 class="sect-header">Authentication Logs</h1>
+    
     <em><h4>for user {{ params['acct'] }}</h4></em>
 {% if params['num_logins'] > 0 %}
         <div class="floatbox">

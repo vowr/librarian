@@ -6,7 +6,10 @@ VOWR Playlist Editor
 
 
 {% block body %}
+        {% include 'includes/_messages.htm' %}
+
         <h1 class="sect-header">My Lineups</h1>
+        
         <form class="form-search" action="{{ url_for('lineupEdit') }}" method="POST">
             <select required onchange="checkNewPlaylist()" class="short" name="playlist" id="playlist">
                 <option selected disabled value="">Choose a playlist</option>

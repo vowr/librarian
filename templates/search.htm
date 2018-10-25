@@ -5,6 +5,7 @@ Search VOWR Digital Catalogue
 {% endblock %}
 
 {% block subnavbar %}
+        {% include 'includes/_messages.htm' %}
         <form class="form-search" method="POST">
             <input type="text" class="auto input-block-level" name="song_title" placeholder="Song">
             <input type="text" class="auto input-block-level" name="artist_name" placeholder="Artist">
