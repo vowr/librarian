@@ -575,14 +575,17 @@ class DBQuery:
         if len(results) > 0:
             return(results[0])
     
-    def importCSVDB(self, file):
+    def importCSVDB(self, file, start=0, end=None):
         def sanitize(string):
             string = re.sub(r'O\\', r"O'", string)
             string = re.sub(r"[^a-zA-z0-9,&' ]+", '', string)
 
         required_keys = ['MKEY', 'MEDIA', 'MCATEGORY', 'ARTIST', 'TITLE', 'SIDE', 'TRACK', 'ALBNUM', 'SELECT', 'PERFTYPE', 'THEME', 'CANADIAN']
         with open(file, 'rU') as infile:
-            lines = infile.readlines()
+            if end != None:
+                lines = infile.readlines()[start:end]
+            else:
+                lines = infile.readlines()[start:]
             data = csv.reader(lines)
             keys = next(data)
             if len(set(required_keys) - set(keys)):
