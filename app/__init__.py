@@ -15,12 +15,12 @@
 import sys
 import os
 import csv
+import datetime 
 
 # Local imports
-import music_manager
-import auth_manager
-import db_manager
-import datetime
+from . import music_manager
+from . import auth_manager
+from . import db_manager
 
 # Flask magic
 import flask

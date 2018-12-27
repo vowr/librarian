@@ -1,5 +1,5 @@
 # XML config files (often contain sensitive and site-specific information)
-*.conf
+*.config
 
 # VS Code Workspace File
 *.code-workspace

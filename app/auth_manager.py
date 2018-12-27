@@ -1,7 +1,7 @@
 # System imports
 import flask
 import flask_login
-import db_manager
+from . import db_manager
 import passlib.hash
 import wtforms
 

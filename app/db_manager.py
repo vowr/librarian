@@ -9,9 +9,9 @@ import flask
 import datetime
 
 # Local imports
-import music_manager
-import xmlconf
-import auth_manager
+from . import music_manager
+from . import xmlconf
+from . import auth_manager
 
 ##############################################################################
 # This class is used to deal with all querying and updating
@@ -48,10 +48,10 @@ class DBQuery:
     def connect(self):
         try:
             curr_hosts,curr_user,curr_passwd,curr_db = ('','','','')
-            curr_hosts = xmlconf.getConfValue('../vowr.conf', 'mysql_hosts')
-            curr_user = xmlconf.getConfValue('../vowr.conf', 'mysql_user')[0]
-            curr_db = xmlconf.getConfValue('../vowr.conf', 'database')[0]
-            curr_passwd = xmlconf.getConfValue('../vowr.conf', 'mysql_pw')[0]
+            curr_hosts = xmlconf.getConfValue('vowr.conf', 'mysql_hosts')
+            curr_user = xmlconf.getConfValue('vowr.conf', 'mysql_user')[0]
+            curr_db = xmlconf.getConfValue('vowr.conf', 'database')[0]
+            curr_passwd = xmlconf.getConfValue('vowr.conf', 'mysql_pw')[0]
         except:
             raise AssertionError("Could not retrieve DB config from XML file.")
 
