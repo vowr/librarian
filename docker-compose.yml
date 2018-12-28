@@ -1,5 +1,8 @@
 version: '2'
 services:
+    man:
+        build: .
+        image: librarian/debian:latest
     web:
         build: .
         ports:

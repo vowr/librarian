@@ -4,13 +4,13 @@
 ############################################################
 
 # Set the base image
-FROM debian:latest
+FROM debian:stretch-slim
 
 # File Author / Maintainer
 MAINTAINER Carlos Tighe
 
 RUN apt-get update && apt-get install -y apache2 \
-    libapache2-mod-wsgi \
+    libapache2-mod-wsgi-py3 \
     build-essential \
     python3 \
     python3-dev\
