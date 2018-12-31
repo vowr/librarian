@@ -2,18 +2,18 @@
    <Application>vowr.conf</Application>
    <ConfigurationItem>
 	  <variable>mysql_hosts</variable>
-	  <value>freedom.jacobhouse.ca</value>
+	  <value>MYSQL_SERVER_HOSTNAME</value>
    </ConfigurationItem>
    <ConfigurationItem>
 	  <variable>mysql_user</variable>
-	  <value>vowr</value>
+	  <value>MYSQL_USERNAME</value>
    </ConfigurationItem>
    <ConfigurationItem>
         <variable>database</variable>
-        <value>vowr_cat</value>
+        <value>MYSQL_DATABASE</value>
    </ConfigurationItem>
    <ConfigurationItem>
         <variable>mysql_pw</variable>
-        <value>p5u8CKoWS</value>
+        <value>MYSQL_PASSWORD</value>
    </ConfigurationItem> 
 </Entity_Profile>
