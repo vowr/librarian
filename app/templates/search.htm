@@ -12,23 +12,31 @@ Search VOWR Digital Catalogue
             <input type="text" class="auto input-block-level" name="album_num" placeholder="Album">
             <input type="text" class="auto input-block-level" name="category" placeholder="Category">
             <div class="padbox">
-                <label for="canadian">Canadian Content Only</label>
+                <label for="canadian">Canadian</label>
                 <input type="checkbox" class="input-block-level" name="canadian" id="canadian">
-                <label for="dedup">Don't Show Duplicates</label>
-                <input type="checkbox" class="input-block-level" name="dedup" id="dedup">
+                <!-- <table style="vertical-align: top; position: relative; top: -4pt; display: inline;">
+                    <tr><td>
+                        <label for="canadian">Canadian</label>
+                        <input type="checkbox" class="input-block-level" name="canadian" id="canadian">
+                    </td></tr>
+                    <tr><td>
+                        <label for="dedup">No Duplicates</label>
+                        <input type="checkbox" checked class="input-block-level" name="dedup" id="dedup">
+                    </td></tr>
+                </table> -->
             </div>
-            <button class="btn btn-large btn-primary thin" type="submit">Search</button>
+            <button class="btn btn-large btn-primary thin rounded-btn" type="submit">Search</button>
         </form>
 {% endblock %}
         
 {% block body %}
 {% if params.get('searchResults') != None %}
-        Test
+        {{ params.get('searchResults') }}
 {% else %}
         <h1 class="sect-header">Instructions</h1>
         <div class="floatbox">
-            <p>
-                This page is used to browse the VOWR Music Library. You may search by <em>Song Title</em>, <em>Artist Name</em>, <em>Library Album ID</em>, and/or <em>Category</em>. You may also filter search results for only Canadian content.
+            <p> 
+                This page is used to browse the VOWR Music Library. You may search by <em>Song Title</em>, <em>Artist Name</em>, <em>Library Album ID</em>, and/or <em>Category</em>. You may also filter search results for only Canadian content or to eliminate duplicate results with an identical <em>Song Title</em> and <em>Artist Name</em>.
             </p>
 
             <p>

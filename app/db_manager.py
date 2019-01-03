@@ -3,6 +3,7 @@ import pymysql
 pymysql.install_as_MySQLdb()
 import re
 import os
+import sys
 import csv
 from collections import OrderedDict
 import flask
@@ -46,13 +47,15 @@ class DBQuery:
     # self.cursor of this class should be initialized and ready to be used.
     ###########################################################################
     def connect(self):
+        config_file = "vowr.config"
         try:
             curr_hosts,curr_user,curr_passwd,curr_db = ('','','','')
-            curr_hosts = xmlconf.getConfValue('vowr.conf', 'mysql_hosts')
-            curr_user = xmlconf.getConfValue('vowr.conf', 'mysql_user')[0]
-            curr_db = xmlconf.getConfValue('vowr.conf', 'database')[0]
-            curr_passwd = xmlconf.getConfValue('vowr.conf', 'mysql_pw')[0]
+            curr_hosts = xmlconf.getConfValue(config_file, 'mysql_hosts')
+            curr_user = xmlconf.getConfValue(config_file, 'mysql_user')[0]
+            curr_db = xmlconf.getConfValue(config_file, 'database')[0]
+            curr_passwd = xmlconf.getConfValue(config_file, 'mysql_pw')[0]
         except:
+            sys.stderr.write("Could not retrieve DB config from '" + os.getcwd() + "/" + config_file + "'.\r\n")
             raise AssertionError("Could not retrieve DB config from XML file.")
 
         if (curr_user == None or curr_passwd == None or curr_db == None or curr_hosts == None):
@@ -88,7 +91,7 @@ class DBQuery:
         if self.cursor == None:
             if self.conn != None:
                 self.conn.close()
-            raise pymysql.Error("MySQL Connection Error")
+            raise pymysql.Error("Could not establish a database connection before timeout.")
     # End self.connect()
 
     ###########################################################################
@@ -504,7 +507,7 @@ class DBQuery:
                 self.conn.commit()
                 return(self.getArtistIdByName(name, create))
             else:
-                flask.abort(404)
+                raise ValueError('No such artist exists.')
         elif len(results) > 1:
             raise AssertionError('DB response indicates duplicate in unique key')
         else:
@@ -530,7 +533,7 @@ class DBQuery:
                 self.conn.commit()
                 return(self.getAlbumIdByNum(num, artist_id, create))
             else:
-                flask.abort(404)
+                raise ValueError('No such album exists.')
         elif len(results) > 1:
             raise AssertionError('DB response indicates duplicate in unique key')
         else:
@@ -620,20 +623,45 @@ class DBQuery:
                     errors[MKEY] = e
             return(errors)
 
-    def findMatchingSongs(self, search):
-        if len(search) < 1:
-            return(None)
+    def findMatchingSongs(self, search, sort_by="artist", page=0, size=0):
+        # if len(set(search) - {'dedup', 'canadian'}) < 1:
+        #     flask.flash("An empty search query was received.", "error")
+        #     return(None)
         print(search)
-        query = "SELECT * FROM songs WHERE display = 1"
+        if search.get("dedup") == "on":
+            query = ""
+        else:
+            query = "SELECT %s FROM %s WHERE display = 1 %s"
         query_params = list()
-        for key in search:
-            query += " AND MATCH (%s) AGAINST (%s IN BOOLEAN MODE)"
-            query_params += [key, search[key]]
-        print(query, query_params)
+        selection = "songs.id,songs.song_title,artists.name,albums.alb_num,songs.category,canadian"
+        tables = 'songs INNER JOIN artists ON songs.artist_id=artists.id INNER JOIN albums ON songs.album_id=albums.id'
+        song_clause = str()
+        # Since we need fulltext searching on the strings and also need to handle the possibility
+        # of the user giving a couple of boolean parameters, we just do each manually. If there
+        # comes a point where the number of parameters is too large for this then we must think of 
+        # another way to construct the query.
+        if "song_title" in search:
+            song_clause +=  " AND MATCH (song_title) AGAINST (%s IN BOOLEAN MODE)"
+            query_params.append(search["song_title"])
+        if "artist_name" in search:
+            tables = tables.replace("INNER JOIN artists ON songs.artist_id=artists.id", "INNER JOIN (SELECT id, name FROM artists WHERE MATCH (name) AGAINST (%s IN BOOLEAN MODE))derived_artists ON songs.artist_id=derived_artists.id")
+            query_params.insert(-1, search["artist_name"])
+            selection = selection.replace('artists.name', 'derived_artists.name')
+        if "album_num" in search:
+            tables = tables.replace("INNER JOIN albums ON songs.album_id=albums.id", "INNER JOIN (SELECT id, alb_num FROM albums WHERE MATCH (alb_num) AGAINST (%s IN BOOLEAN MODE))derived_albums ON songs.album_id=derived_albums.id")
+            query_params.insert(-1, search["album_num"])
+            selection = selection.replace('albums.alb_num', 'derived_albums.alb_num')
+        if "category" in search:
+            song_clause += " AND MATCH (category) AGAINST (%s IN BOOLEAN MODE)"
+            query_params.append(search["category"])
+        if search.get("canadian") == "on":
+            query += " AND canadian = 1"
+        query = query % (selection, tables, song_clause)
+        sys.stdout.write("Using query \"" + query % tuple(query_params) + "\".\r\n")
         self.cursor.execute(query, query_params)
         results = self.cursor.fetchall()
-        pass 
-
+        return(results)
+        
     def getUsernameById(self, id):
         self.cursor.execute("SELECT username FROM users WHERE id = %s", (id,))
         results = self.cursor.fetchall()

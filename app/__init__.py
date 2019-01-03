@@ -50,13 +50,15 @@ def defaultPage():
 @app.route('/search', methods=['POST', 'GET'])
 def searchPage():
     if flask.request.method == 'POST':
-        search_terms = ['song_title', 'artist_name', 'album_num', 'category']
+        search_terms = ['song_title', 'artist_name', 'album_num', 'category', 'canadian', 'dedup', 'page']
         search = {term:flask.request.form.get(term) for term in search_terms if flask.request.form.get(term)}
         try:
             db = db_manager.DBQuery()
         except:
             flask.abort(500)    
-        params['songs'] = db.findMatchingSongs(search)
+        params['searchResults'] = db.findMatchingSongs(search)
+        if len(params['searchResults']) < 1:
+            params['searchResults'] = None 
     return(flask.render_template('search.htm', params=params))
 
 # Accepts only POSTS (from JS) to help autocomplete search requests
