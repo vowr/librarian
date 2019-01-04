@@ -13,7 +13,7 @@ Sign In
         <form class="form-signin" method="POST" action="">
             <h2 class="form-signin-heading">Please sign in</h2>
             <div id="login-type-btn" class="btn-group toggle-btns">
-                <a usepost href="{{ url_for('gatekeeperSignInBasic') }}" class="btn btn-default">Basic Login</a>
+                <a usepost href="{{ url_for('gatekeeperSignInBasic', next=params['next']) }}" class="btn btn-default">Basic Login</a>
                 <a usepost href="#" class="btn active btn-primary">Master Login</a>
             </div>
             {% include 'includes/_messages.htm' %}
@@ -25,6 +25,6 @@ Sign In
             </div>
             <button class="btn btn-large btn-primary" type="submit">Sign in</button>
         </form>
-        <div class="center"><a class="forgot" href="{{ url_for('gatekeeperForgot') }}">Forgot your password?</a></div>
+        <div class="center"><a class="forgot" href="{{ url_for('gatekeeperForgot', next=params['next']) }}">Forgot your password?</a></div>
         
 {% endblock %}

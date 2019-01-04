@@ -120,16 +120,28 @@ class User(flask_login.UserMixin):
             raise AssertionError('Authentication failed. Your account is locked due to repeated invalid login attempts.')
 
         self._permissions, self._effective_permissions = self._UserPermisson(), self._UserPermisson()
-        if login_type == 'master':
-            if not is_authenticated:
-                goodPasswd = passlib.hash.pbkdf2_sha512.verify(plaintextPassword, userinfo['passhash'])
-                if not goodPasswd:
-                    db.incrementLockoutCount(username)
-                    raise ValueError('Authentication failed. Incorrect password.')
-            self._effective_permissions._master = userinfo['master'] 
-            self._effective_permissions._admin = userinfo['admin']
+        if userinfo['master']:  
+            if login_type == 'master':
+                # Master user logging in as master
+                if not is_authenticated:
+                    goodPasswd = passlib.hash.pbkdf2_sha512.verify(plaintextPassword, userinfo['passhash'])
+                    if not goodPasswd:
+                        db.incrementLockoutCount(username)
+                        raise ValueError('Authentication failed. Incorrect password.')
+                self._effective_permissions._master = userinfo['master'] 
+                self._effective_permissions._admin = userinfo['admin']
+            else:
+                # Master user logging in as basic
+                self._effective_permissions._master = False 
+                self._effective_permissions._admin = False 
         else:
-            self._master, self._admin = False, False
+            if login_type == 'master':
+                # Basic user attempting master login
+                raise AssertionError('Authentication failed. User account for ' + username + ' is not a master account. Use the Basic Login page to sign in.')
+            else:
+                # Basic user logging in as basic
+                self._effective_permissions._master = False 
+                self._effective_permissions._admin = False 
         
         if not userinfo['active']:
             raise AssertionError('Authentication failed. Your account has been marked as inactive.')

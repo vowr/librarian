@@ -14,7 +14,7 @@ Sign In
             <h2 class="form-signin-heading">Please sign in</h2>
             <div id="login-type-btn" class="btn-group toggle-btns">
                 <a usepost href="#" class="btn active btn-primary">Basic Login</a>
-                <a usepost href="{{ url_for('gatekeeperSignInMaster') }}" class="btn btn-default">Master Login</a>
+                <a usepost href="{{ url_for('gatekeeperSignInMaster', next=params['next']) }}" class="btn btn-default">Master Login</a>
             </div>
             {% include 'includes/_messages.htm' %}
             <div class="form-group">

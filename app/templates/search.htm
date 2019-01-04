@@ -31,7 +31,75 @@ Search VOWR Digital Catalogue
         
 {% block body %}
 {% if params.get('searchResults') != None %}
-        {{ params.get('searchResults') }}
+                <div class="floatbox">
+{% if params['num_results'] > 0 %}
+            <table class="table table-hover">
+                <thead>
+                <!-- Look into whether or not it is possible to have set-width columns... 
+                For example, Album Number, Media, Side, and Track should be narrower than
+                Song Title and Artist Name. -->
+                <tr>
+                    <th></th> <!-- This will be where the Canadian marker goes. -->
+                    <th>Song Title</th>
+                    <th>Artist Name</th>
+                    <th>Album Number</th>
+                    <th>Category</th>
+                    <th>Media</th>
+                    <th>Side</th>
+                    <th>Track</th>
+                    <th>Performance Type</th>
+                    <th>Theme</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+{% for song in params['searchResults'] %}      
+                <tr>
+{% if song.canadian %}
+                    <td><!-- Canadian flag here. --></td>
+{% else %}
+                    <td><!-- No Canadian flag here. --></td>
+{% endif %}
+                    <td>{{ song.song_title }}</td>
+                    <td>{{ song.artist_name }}</td>
+                    <td>{{ song.alb_num }}</td>
+                    <td>{{ song.category }}</td>
+                    <td>{{ song.media }}</td>
+                    <td>{{ song.side }}</td>
+                    <td>{{ song.track }}</td>
+                    <td>{{ song.perf_type }}</td>
+                    <td>{{ song.theme }}</td>
+                    <td>
+                        <a class="usepost" style="padding-right: 6pt" href="{{ url_for('cpUserLogs', id=user['id']) }}" title="Account activity" usepost><i class="fa fa-fingerprint"></i></a>
+{% if not user['admin'] %}  
+                        <a class="usepost" style="padding-right: 6pt" href="{{ url_for('cpUserAdmin', id=user['id']) }}" title="Make account admin" usepost><i class="fa fa-user-shield"></i></a>
+{% else %}
+                        <a class="usepost" style="padding-right: 6pt" href="{{ url_for('cpUserAdmin', id=user['id']) }}" title="Make account basic" usepost><i class="fa fa-user-minus"></i></a>
+{% endif %}
+{% if not user['master'] %}  
+                        <a class="usepost" style="padding-right: 6pt" href="{{ url_for('cpUserMaster', id=user['id']) }}" title="Make account master" usepost><i class="fa fa-user-edit"></i></a>
+{% else %}
+                        <a class="usepost" style="padding-right: 6pt" href="{{ url_for('cpUserMaster', id=user['id']) }}" title="Make account basic" usepost><i class="fa fa-user-times"></i></a>
+{% endif %}
+{% if user['active'] %}                        
+                        <a class="usepost" style="padding-right: 6pt" href="{{ url_for('cpUserActive', id=user['id']) }}" title="Deactivate this account" usepost><i class="fa fa-ban"></i></a>
+{% else %}
+                        <a class="usepost" style="padding-right: 6pt" href="{{ url_for('cpUserActive', id=user['id']) }}" title="Activate this account" usepost><i class="fa fa-check-circle"></i></a>
+{% endif %}
+{% if user['locked'] %}                        
+                        <a class="usepost" style="padding-right: 6pt" href="{{ url_for('cpUserUnlock', id=user['id']) }}" title="Unlock account" usepost><i class="fa fa-unlock"></i></a>
+{% endif %}
+                    </td>
+                </tr>
+{% endfor %}            
+                </tbody>
+            </table>
+{% else %}
+        <div class="center">
+            No songs match the search critera you provided.
+        </div>
+{% endif %}
+        </div>
 {% else %}
         <h1 class="sect-header">Instructions</h1>
         <div class="floatbox">

@@ -30,7 +30,7 @@ app = flask.Flask(__name__)
 app.secret_key = '\xf0n\x94x\xdfK\x98\xbdN3\xb4\xd0\x1a\x1f\xd1\xd1\xf3P\xd1\xa6I~\x93@'
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = '/gatekeeper/sign-in' # This is dependent on the routes below
+login_manager.login_view = '/gatekeeper/sign-in/basic' # This is dependent on the routes below
 
 # General-use dictionary to pass things to the HTML processor
 params = dict()
@@ -48,6 +48,7 @@ def defaultPage():
 
 # Music search page
 @app.route('/search', methods=['POST', 'GET'])
+@flask_login.login_required
 def searchPage():
     if flask.request.method == 'POST':
         search_terms = ['song_title', 'artist_name', 'album_num', 'category', 'canadian', 'dedup', 'page']
@@ -57,8 +58,9 @@ def searchPage():
         except:
             flask.abort(500)    
         params['searchResults'] = db.findMatchingSongs(search)
-        if len(params['searchResults']) < 1:
-            params['searchResults'] = None 
+        params['num_results'] = len(params['searchResults'])
+        # if len(params['searchResults']) < 1:
+        #     params['searchResults'] = None
     return(flask.render_template('search.htm', params=params))
 
 # Accepts only POSTS (from JS) to help autocomplete search requests
@@ -68,6 +70,7 @@ def searchPage():
 # like to implement but since I am using MySQL boolean full text
 # searching, this may be difficult without a full rewrite.
 @app.route('/search/auto', methods=['GET', 'POST'])
+@flask_login.login_required
 def autocomplete():
     try:
         db = db_manager.DBQuery()
@@ -87,7 +90,7 @@ def autocomplete():
 # Unlike /modify, there is no logic going on here since the user must supply all values.
 # The logic for /append is in the /append/commit backend page.
 @app.route('/append', methods=['GET', 'POST'])
-# @flask_login.login_required
+@flask_login.login_required
 def appendPage():
     if flask.request.method == 'POST':
         # Here is where the logic for /append happens. If the user tries to append an entry that exists
@@ -143,7 +146,7 @@ def appendPage():
 # Otherwise, pull up the song from the DB by its ID and give the user access to edit it.
 # We really should record when and by whom the last edit was made. Option to undo??
 @app.route('/modify', methods=['POST', 'GET'])
-# @flask_login.login_required
+@flask_login.login_required
 def modifyPage():
     if flask.request.method == 'POST':
         if flask.request.form.get('song_id') != None:
@@ -158,6 +161,7 @@ def modifyPage():
     return(flask.render_template('modify.htm', params=params))
 
 @app.route('/modify/commit', methods=['POST'])
+@flask_login.login_required
 def commitModify():
     ret = list()
     if flask.request.method == 'POST' and flask.request.form.get('song_id') != None:
@@ -202,6 +206,7 @@ def commitModify():
 
 
 @app.route('/lineup', methods=['GET', 'POST'])
+@flask_login.login_required
 def lineupPage():
     try:
         db = db_manager.DBQuery()
@@ -212,6 +217,7 @@ def lineupPage():
     return(flask.render_template('lineups.htm', params=params))
 
 @app.route('/lineup/edit', methods=['GET', 'POST'])
+@flask_login.login_required
 def lineupEdit():
     if flask.request.method == 'POST' and flask.request.form.get('playlist'):
         try:
@@ -238,6 +244,7 @@ def lineupEdit():
         return(flask.redirect(flask.url_for('playlistPage')))
 
 @app.route('/control-panel')
+@flask_login.login_required
 def cpBase():
     return(flask.redirect(flask.url_for('cpHome'), 301))
 
@@ -379,11 +386,20 @@ def gatekeeperSignInBasic():
             flask.session['login'] = 'basic'
         except Exception as e:
             flask.flash(str(e), 'error')
+            if 'next' in flask.request.args:
+                params['next'] = flask.request.args.get('next')
+            return(flask.render_template('gatekeeper_sign-in_basic.htm', params=params))
         else:
             flask_login.login_user(user)
             flask.flash('You have successfully signed in.', 'success')
-            return(flask.redirect(flask.url_for('defaultPage')))
-    return(flask.render_template('gatekeeper_sign-in_basic.htm', params=params))
+            if 'next' in flask.request.args:
+                return(flask.redirect(flask.request.args.get('next')))
+            else:
+                return(flask.redirect(flask.url_for('defaultPage')))
+    else:
+        if 'next' in flask.request.args:
+            params['next'] = flask.request.args.get('next')
+        return(flask.render_template('gatekeeper_sign-in_basic.htm', params=params))
 
 
 @app.route('/gatekeeper/sign-in/master', methods=['GET', 'POST'])
@@ -398,11 +414,20 @@ def gatekeeperSignInMaster():
             flask.session['login'] = 'master'
         except Exception as e:
             flask.flash(str(e), 'error')
+            if 'next' in flask.request.args:
+                params['next'] = flask.request.args.get('next')
+            return(flask.render_template('gatekeeper_sign-in_master.htm', params=params))
         else:
             flask_login.login_user(user)
             flask.flash('You have successfully signed in.', 'success')
-            return(flask.redirect(flask.url_for('defaultPage')))
-    return(flask.render_template('gatekeeper_sign-in_master.htm', params=params))
+            if 'next' in flask.request.args:
+                return(flask.redirect(flask.request.args.get('next')))
+            else:
+                return(flask.redirect(flask.url_for('defaultPage')))
+    else:
+        if 'next' in flask.request.args:
+            params['next'] = flask.request.args.get('next')
+        return(flask.render_template('gatekeeper_sign-in_master.htm', params=params))
 
 @app.route('/gatekeeper/register', methods=['GET', 'POST'])
 def gatekeeperRegister():
@@ -416,10 +441,8 @@ def gatekeeperRegister():
             db.createUser(params['reg_form'])
         except AssertionError as e:
             flask.flash(str(e), 'error')
-            return(flask.redirect(flask.url_for('gatekeeperRegister')))
         except Exception as e:
             flask.flash(str(e), 'error')
-            return(flask.redirect(flask.url_for('gatekeeperRegister')))
         else:
             flask_login.login_user(auth_manager.User(params['reg_form'].username.data, None))
             flask.flash(flask.Markup('Your account was created successfully. If you want to switch to a <em>master</em> account, use the <em>Control Panel</em> tab above.'), 'success')
@@ -429,9 +452,10 @@ def gatekeeperRegister():
 @app.route('/gatekeeper/sign-out')
 def gatekeeperSignOut():
     if flask_login.current_user.is_authenticated:
-        flask_login.logout_user()
-        flask.session.pop('username')
         flask.flash('You are now logged out.', 'success')
+    flask_login.logout_user()
+    if 'username' in flask.session:
+        flask.session.pop('username')
     return(flask.redirect(flask.url_for('defaultPage')))
 
 @app.route('/gatekeeper/forgot', methods=['GET', 'POST'])
@@ -442,13 +466,16 @@ def gatekeeperForgot():
     params['btn_name'] = 'Submit'
     params['reset_form_part'] = 1
     if flask.request.method == 'POST' and flask.request.form.get('username'):
-        params['reset_username'] = flask.request.form.get('username')
+        params['reset_username'] = flask.request.form['username']
         try:
             db = db_manager.DBQuery()
             params['sec_q'], sec_a = db.getUserSecQAByUsername(params['reset_username'])
         except:
             del params['reset_username']
             flask.flash('Unable to retrieve account information', 'error')
+            return(flask.redirect(flask.url_for('gatekeeperForgot')))
+        if params['sec_q'] is None:
+            flask.flash(flask.Markup("User account <strong>" + params['reset_username'] + "</strong> is not a master account. Only master accounts have passwords. To sign in, user the Basic Login page."))
             return(flask.redirect(flask.url_for('gatekeeperForgot')))
         params['reset_form_part'] = 2
         if flask.request.form.get('sec_a'):
@@ -496,7 +523,9 @@ def gatekeeperUpgrade():
             return(flask.redirect(flask.url_for('defaultPage')))
     return(flask.render_template('gatekeeper_upgrade.htm', params=params))
 
-
+@app.route('/about', methods=['GET'])
+def aboutPage():
+    return(flask.render_template('default.htm', params=params))
 
 
 @login_manager.user_loader
@@ -510,15 +539,18 @@ def load_user(user_id):
     if loginType != 'master':
         loginType = 'basic'
     flask.session['username'] = username
-    return(auth_manager.User(username, None, is_authenticated=True, login_type=loginType))
+    try:
+        user = auth_manager.User(username, None, is_authenticated=True, login_type=loginType)
+        return(user)
+    except AssertionError as e:
+        flask.flash(str(e), 'error')
+        return(flask.redirect(flask.url_for('gatekeeperSignInBasic')))
 
 @app.before_request
 def preflight():
     # Items to display in the navigation bar. I don't like having to use this dict but it is what it is
-    params['navbar'] = {
-        'Home':flask.url_for('defaultPage')
-    }
-    params['admin'], params['master'], params['user'] = True, True, 'jdoe' # DEV
+    params['navbar'] = dict()
+    params['navbar']['Home'] = flask.url_for('defaultPage')
     if flask_login.current_user.is_authenticated:
         params['navbar']['Search'] = flask.url_for('searchPage')
         params['navbar']['My Lineup'] = flask.url_for('lineupPage')
@@ -532,6 +564,8 @@ def preflight():
                 'Users':flask.url_for('cpUsers'),
                 'Setup':flask.url_for('cpSetup')
             }
+    params['navbar']['About'] = flask.url_for('aboutPage')
+    
 
 @app.after_request
 def add_header(r):
