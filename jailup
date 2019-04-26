@@ -19,6 +19,9 @@ pkg install -y \
 test -d /app || mkdir /app
 cd /app
 
+# Clone the repo
+git clone https://github.com/jwfh/librarian .
+
 # Run app using gunicorn
 gunicorn-3.6 -w 4 -b 127.0.0.1:4000 run:app
 
