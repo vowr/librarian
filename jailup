@@ -1,0 +1,24 @@
+#!/usr/bin/env sh
+
+# Install pkg in new jails
+env ASSUME_ALWAYS_YES=YES pkg bootstrap
+
+# Install required packages
+pkg install -y \
+	git \
+	python3 \
+	py36-Flask \
+	py36-Flask-Login \
+	py36-wtforms \
+	py36-Flask-wtf \
+	py36-passlib \
+	py36-pymysql \
+	py36-gunicorn \
+
+# Change to app directory
+test -d /app || mkdir /app
+cd /app
+
+# Run app using gunicorn
+gunicorn-3.6 -w 4 -b 127.0.0.1:4000 run:app
+
