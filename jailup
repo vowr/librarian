@@ -4,6 +4,7 @@
 env ASSUME_ALWAYS_YES=YES pkg bootstrap
 
 # Install required packages
+pkg updage -y
 pkg install -y \
 	git \
 	python3 \
@@ -15,13 +16,18 @@ pkg install -y \
 	py36-pymysql \
 	py36-gunicorn \
 
-# Change to app directory
+# Make to app directory
 test -d /app || mkdir /app
-cd /app
 
 # Clone the repo
-git clone https://github.com/jwfh/librarian .
+git clone https://github.com/jwfh/librarian /app
 
-# Run app using gunicorn
-gunicorn-3.6 -w 4 -b 127.0.0.1:4000 run:app
+# Copy the rc.d script into /etc/rc.d/
+cp /app/etc/rc.d/librariand /etc/rc.d/librariand
+chmod 555 /etc/rc.d/librariand
 
+# Start the service at boot
+echo 'librariand_enable="YES"' > /etc/rc.conf
+
+# Make user to run the app as
+pw useradd librariand -d /app

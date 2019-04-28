@@ -1,8 +1,11 @@
-# librarian
-VOWR Music Librarian Web App
+# VOWR Music Librarian Web App
 
-To run the app within a FreeBSD jail I recommend using the convenient [iocage](https://iocage.readthedocs.io/en/latest/) 
-jail management tool. With this, one may execute commands similar to those shown below to run an instance of _librarian_.
+## Deployment
+
+### FreeBSD
+
+To run the app within a FreeBSD jail I recommend using the convenient [iocage](https://iocage.readthedocs.io/en/latest/)
+jail management tool. With this, one may execute commands similar to those shown below to run an instance of _librarian_ inside a jail. Currently this as only been tested on 12.0-RELEASE.
 
 ```bash
 iocage create -r LATEST -n <jail-name>
@@ -11,8 +14,18 @@ iocage set boot=on <jail-name>
 iocage exec <jail-name> 'fetch --no-verify-peer https://raw.githubusercontent.com/jwfh/librarian/master/jailup -o - | sh'
 ```
 
-Use in Docker is also supported. A [Dockerfile](https://github.com/jwfh/librarian/blob/master/Dockerfile) is provided.
-From within the root project directory, run the `docker build` command, specifying any optional parameters you wish to 
+The `jailup` script executed in line four above does a number of things:
+
+1. Bootstraps the `pkg` package manager
+2. Installs required dependencies
+3. Clones the _librarian_ repository to `/app`
+4. Copies the `librariand` rc.d script to `/etc/rc.d` and enables the _librariand_ service to start at boot
+5. Creates a user called `librariand` whose account will be used with [`daemon(8)`](https://www.freebsd.org/cgi/man.cgi?query=daemon&sektion=8&manpath=freebsd-release-ports) to run Gunicorn
+
+### Linux and macOS
+
+Use in Docker is also supported for deployment on Linux or development on macOS. A [Dockerfile](https://github.com/jwfh/librarian/blob/master/Dockerfile) is provided.
+From within the root project directory, run the `docker build` command, specifying any optional parameters you wish to
 include. For example,
 
 ```bash

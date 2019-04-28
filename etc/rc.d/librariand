@@ -1,0 +1,46 @@
+#! /bin/sh
+#
+# $FreeBSD$
+#
+
+# PROVIDE: librariand
+# REQUIRE: DAEMON
+# KEYWORD: shutdown 
+
+#
+# Add the following lines to /etc/rc.conf to enable librariand:
+#
+#librariand_enable="YES"
+
+. /etc/rc.subr
+
+name="librariand"
+rcvar="${name}_enable"
+start_cmd="${name}_start"
+stop_cmd="${name}_stop"
+
+librariand_start(){
+  chdir /app
+  touch /var/run/librariand.sock
+  daemon -r -S -p /var/run/librariand.pid -T librariand -u librariand /usr/local/bin/gunicorn-3.6 -w 4 -b unix:/var/run/librariand.sock run:app
+}
+
+librariand_stop(){
+  if [ -f /var/run/librariand.pid ]; then
+    echo -n "Stopping services: ${name}"
+    kill -s INT `cat /var/run/librariand.pid`
+    if [ -f /var/run/librariand.pid ]; then
+      rm -f /var/run/librariand.pid
+    fi
+    if [ -f /var/run/librariand.sock ]; then
+      rm -f /var/run/librariand.sock
+    fi
+    echo "."
+  else
+    echo "It appears ${name} is not running."
+  fi
+}
+       
+
+load_rc_config ${name}
+run_rc_command "$1"
